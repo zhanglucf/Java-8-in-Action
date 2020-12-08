@@ -8,7 +8,7 @@ public class Timer {
         start = System.nanoTime();
     }
 
-    public long diff() {
-        return (System.nanoTime() - start) / 1000;
+    public long duration() {
+        return (System.nanoTime() - start) / 1000_000;
     }
 }

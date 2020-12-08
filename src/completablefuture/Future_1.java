@@ -13,12 +13,12 @@ import java.util.stream.Collectors;
 
 import static util._Print.println;
 
-public class _Future {
+public class Future_1 {
 
     //推荐使用Future带有超时参数的get方法
     public static void main(String[] args) throws ExecutionException, InterruptedException {
 //        demo();
-//        demo2();
+        demo2();
 //        demo3();
 //        double price = getPrice();
 //        println(price);
@@ -117,77 +117,9 @@ public class _Future {
         es.shutdown();
     }
 
-    @Test
-    public void getPrice() {
-        Timer timer = new Timer();
-        List<String> shopNames = Arrays.asList("京东", "淘宝", "拼多多");
-        List<Future<Double>> fs = new ArrayList<>();
-        for (String shopName : shopNames) {
-            Future<Double> f = getPriceAsyncByShopName(shopName);
-            fs.add(f);
-        }
-
-        doSomeThing();
-        println(timer.diff());
-
-        Double price = fs.stream()
-                .map(f -> {
-                    try {
-                        return f.get(30, TimeUnit.SECONDS);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    } catch (ExecutionException e) {
-                        e.printStackTrace();
-                    } catch (TimeoutException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                })
-                .collect(Collectors.maxBy(Double::compare))
-                .orElse(-1.0);
-        println(price);
-        println(timer.diff());
-    }
-
-    private static Future<Double> getPriceAsyncByShopName(String shopName) {
-        CompletableFuture<Double> cf = new CompletableFuture<>();
-        switch (shopName) {
-            case "京东":
-                new Thread(() -> {
-                    println("调用京东商品价格API");
-                    println(" calling 京东API");
-                    new Nap(3);
-                    println(" calling 京东API successful");
-
-                    cf.complete(300.0);
-                }).start();
-                break;
-            case "淘宝":
-                new Thread(() -> {
-                    println("调用淘宝商品价格API");
-                    println(" calling 淘宝API");
-                    new Nap(2);
-                    println(" calling 淘宝API successful");
-
-                    cf.complete(200.0);
-                }).start();
-                break;
-            case "拼多多":
-                new Thread(() -> {
-                    println("调用拼多多商品价格API");
-                    println(" calling 拼多多API");
-                    new Nap(5);
-                    println(" calling 拼多多API successful");
-
-                    cf.complete(100.0);
-                }).start();
-                break;
-        }
-        return cf;
-    }
 
     private static void doSomeThing() {
-        new Nap(3);
-        System.out.println("doSomeThing 等待异步接口的同时，我可以做一些其他的事确 花费了3s时间");
+        new Nap(6);
+        println("doSomeThing 等待异步接口的同时，我可以做一些其他的事确 花费了3s时间");
     }
 }
